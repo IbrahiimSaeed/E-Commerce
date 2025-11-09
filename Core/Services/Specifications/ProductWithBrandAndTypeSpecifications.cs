@@ -1,0 +1,50 @@
+﻿using Domain.Entites.ProductModule;
+using Shared;
+using Shared.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Specifications
+{
+    internal class ProductWithBrandAndTypeSpecifications : BaseSpecifications<Product,int>
+    {
+        //CTOR ==> Get All Product ==> Include Types , Brands [Include]
+        public ProductWithBrandAndTypeSpecifications(ProductSpecificationParameters parameters) 
+            : base(p => (!parameters.TypeId.HasValue || p.TypeId == parameters.TypeId) && 
+                        (!parameters.BrandId.HasValue || p.BrandId == parameters.BrandId) &&
+                        (string.IsNullOrEmpty(parameters.Search) || p.Name.ToLower().Contains(parameters.Search.ToLower())))
+        {
+            AddIncludes(p => p.ProductBrand);
+            AddIncludes(p => p.ProductType);
+
+            switch(parameters.Sort)
+            {
+                case ProductSortingOptions.NameAsc:
+                    AddOrderBy(p => p.Name);
+                    break;
+                case ProductSortingOptions.NameDesc:
+                    AddOrderByDescending(p => p.Name);
+                    break;
+                case ProductSortingOptions.PriceAsc:
+                    AddOrderBy(p => p.Price);
+                    break;
+                case ProductSortingOptions.PriceDesc:
+                    AddOrderByDescending(p => p.Price);
+                    break;
+                default:
+                    break;
+            }
+            ApplyPagination(parameters.PageSize, parameters.PageIndex);
+        }
+
+        //CTOR ==> Get Product By Id ==> Include Type , Brand [Include] . Where [Criteria]
+        public ProductWithBrandAndTypeSpecifications(int id) : base (p => p.Id == id)
+        {
+            AddIncludes(p => p.ProductBrand);
+            AddIncludes(p => p.ProductType);
+        }
+    }
+}
