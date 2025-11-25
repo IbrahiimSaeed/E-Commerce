@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction.Contracts;
-using Shared.Dtos;
+using Shared;
+using Shared.Dtos.ProductModule;
+using Shared.Enums;
+using Shared.ErrorModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +13,11 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController(IServiceManager _serviceManager) : ControllerBase
+    public class ProductsController(IServiceManager _serviceManager) : ApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductResultDto>>> GetAllProductsAsync()
-            => Ok(await _serviceManager.ProductService.GetAllProductsAsync());
+        public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProductsAsync([FromQuery]ProductSpecificationParameters parameters)
+            => Ok(await _serviceManager.ProductService.GetAllProductsAsync(parameters));
 
         [HttpGet("Brands")]
         public async Task<ActionResult<IEnumerable<BrandResultDto>>> GetAllBrandsAsync()
@@ -25,6 +27,8 @@ namespace Presentation.Controllers
         public async Task<ActionResult<IEnumerable<TypeResultDto>>> GetAllTypesAsync()
             => Ok(await _serviceManager.ProductService.GetAllTypesAsync());
 
+
+        [ProducesResponseType(typeof(ProductResultDto), StatusCodes.Status200OK)]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductResultDto>> GetProductByIdAsync(int id)
             => Ok(await _serviceManager.ProductService.GetProductByIdAsync(id));
