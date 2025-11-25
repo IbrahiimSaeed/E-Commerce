@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Exceptions
 {
-    public sealed class DeliveryMethodNotFoundException : NotFoundException 
+    public sealed class UserNotFoundException : NotFoundException
     {
-        public DeliveryMethodNotFoundException(int id) : base($"Delivery Method with id : {id} Not Found")
+        public UserNotFoundException(string email) : base($"User with email : {email} not found")
         {
             
         }

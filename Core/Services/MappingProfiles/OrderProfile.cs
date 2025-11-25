@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entites.IdentityModule;
 using Domain.Entites.OrderModule;
 using Shared.Dtos.OrderModule;
 using System;
@@ -6,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShippingAddress = Domain.Entites.OrderModule.Address;
+using IdentityAddress = Domain.Entites.IdentityModule.Address;
 
 namespace Services.MappingProfiles
 {
@@ -13,7 +16,8 @@ namespace Services.MappingProfiles
     {
         public OrderProfile()
         {
-            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<ShippingAddress, AddressDto>().ReverseMap();
+            CreateMap<IdentityAddress, AddressDto>().ReverseMap();
             CreateMap<DeliveryMethod, DeliveryMethodResult>();
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(dest => dest.ProductId, options => options.MapFrom(src => src.Product.ProductId))
