@@ -23,7 +23,7 @@ namespace Domain.Entites.OrderModule
         {
             
         }
-        public Order(string userEmail, ShippingAddress shippingAddress, ICollection<OrderItem> orderItems, DeliveryMethod deliveryMethod, decimal subTotal)
+        public Order(string userEmail, ShippingAddress shippingAddress, ICollection<OrderItem> orderItems, DeliveryMethod deliveryMethod, decimal subTotal, string paymentIntentId)
         {
             Id = Guid.NewGuid();
             UserEmail = userEmail;
@@ -31,6 +31,7 @@ namespace Domain.Entites.OrderModule
             OrderItems = orderItems;
             DeliveryMethod = deliveryMethod;
             SubTotal = subTotal;
+            PaymentIntentId = paymentIntentId;
         }
 
 
